@@ -5,3 +5,4 @@ public interface CounterMBean {
 
     public long getTotalHits();
 }
+
