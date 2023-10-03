@@ -34,7 +34,7 @@ public class HitService implements Serializable, HitDao {
             session.persist(hit);
             transaction.commit();
             String formattedDate = hit.getDate();
-            notification.notifyAdding(hit.isSuccess(), formattedDate);
+            notification.notifyAdding(hit.isSuccess(), formattedDate, hit.getX(), hit.getY(), hit.getR());
         }
         catch (Exception e){
             if (transaction.getStatus() == TransactionStatus.MARKED_ROLLBACK || transaction.isActive())
@@ -50,7 +50,7 @@ public class HitService implements Serializable, HitDao {
         currentSession.getTransaction().commit();
         for (Hit hit : listAnswer) {
             String formattedDate = hit.getDate();
-            notification.notifyAdding(hit.isSuccess(), formattedDate);
+            notification.notifyAdding(hit.isSuccess(), formattedDate, hit.getX(), hit.getY(), hit.getR());
         }
         return listAnswer;
     }

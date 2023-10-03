@@ -20,8 +20,8 @@ public class Notification {
     public Notification() {
     }
 
-    public void notifyAdding(boolean isSuccess, String date) {
-        counter.increment(isSuccess);
+    public void notifyAdding(boolean isSuccess, String date,double x, double y, double r) {
+        counter.increment(isSuccess, x, y, r);
         interval.increment(date);
     }
 
