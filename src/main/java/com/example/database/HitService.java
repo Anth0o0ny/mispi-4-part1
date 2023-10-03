@@ -1,26 +1,35 @@
 package com.example.database;
 
+import com.example.jmx.util.Notification;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import com.example.objective.Hit;
 import org.hibernate.Transaction;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
 
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ApplicationScoped;
+import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 import java.util.List;
 
+@ManagedBean(name = "hitService")
+@ApplicationScoped
 
 public class HitService implements Serializable, HitDao {
 
     private final SessionFactory manager = ConnectionManager.getSessionFactory();
 
 
+    public HitService() {
+    }
+
     @Override
     public void add(Hit hit) {
         Session session = manager.openSession();
         Transaction transaction = session.beginTransaction();
         try {
-            session.save(hit);
+            session.persist(hit);
             transaction.commit();
         }
         catch (Exception e){
@@ -45,4 +54,5 @@ public class HitService implements Serializable, HitDao {
         currentSession.createQuery("delete from Hit").executeUpdate();
         currentSession.getTransaction().commit();
     }
+
 }

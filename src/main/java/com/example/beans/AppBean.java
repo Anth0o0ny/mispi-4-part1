@@ -4,7 +4,9 @@ import com.example.database.HitService;
 import com.example.objective.Hit;
 import com.example.verify.Verifier;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -14,10 +16,16 @@ import java.util.List;
 @SessionScoped
 public class AppBean implements Serializable {
     private final Verifier verifier = new Verifier();
-    private final HitService hitService = new HitService();
+    @ManagedProperty("#{hitService}")
+    private HitService hitService;
     private Hit hit = new Hit();
-    private List<Hit> hits = hitService.getAll();
+    private List<Hit> hits;
 
+
+    @PostConstruct
+    public void init() {
+        hits = hitService.getAll();
+    }
 
     public void add() {
         long start = System.nanoTime();
@@ -51,5 +59,12 @@ public class AppBean implements Serializable {
         this.hits.clear();
     }
 
+    public HitService getHitService() {
+        return hitService;
+    }
+
+    public void setHitService(HitService hitService) {
+        this.hitService = hitService;
+    }
 }
 
