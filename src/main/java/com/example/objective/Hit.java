@@ -3,11 +3,8 @@ package com.example.objective;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 @Table(name = "hits")
 @Entity
@@ -103,5 +100,4 @@ public class Hit implements Serializable {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.date = date.format(formatter);
     }
-
 }

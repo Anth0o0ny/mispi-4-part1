@@ -20,6 +20,8 @@ public class HitService implements Serializable, HitDao {
 
     private final SessionFactory manager = ConnectionManager.getSessionFactory();
 
+    @ManagedProperty("#{notification}")
+    private Notification notification;
 
     public HitService() {
     }
@@ -31,6 +33,8 @@ public class HitService implements Serializable, HitDao {
         try {
             session.persist(hit);
             transaction.commit();
+            String formattedDate = hit.getDate();
+            notification.notifyAdding(hit.isSuccess(), formattedDate);
         }
         catch (Exception e){
             if (transaction.getStatus() == TransactionStatus.MARKED_ROLLBACK || transaction.isActive())
@@ -44,6 +48,10 @@ public class HitService implements Serializable, HitDao {
         currentSession.beginTransaction();
         List<Hit> listAnswer = currentSession.createQuery( "FROM Hit ").list();
         currentSession.getTransaction().commit();
+        for (Hit hit : listAnswer) {
+            String formattedDate = hit.getDate();
+            notification.notifyAdding(hit.isSuccess(), formattedDate);
+        }
         return listAnswer;
     }
 
@@ -53,6 +61,14 @@ public class HitService implements Serializable, HitDao {
         currentSession.beginTransaction();
         currentSession.createQuery("delete from Hit").executeUpdate();
         currentSession.getTransaction().commit();
+        notification.notifyClearing();
     }
 
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Notification notification) {
+        this.notification = notification;
+    }
 }
